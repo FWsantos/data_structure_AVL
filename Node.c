@@ -1,75 +1,76 @@
 typedef struct node Node;
 typedef struct node{
-	int key;
-	int FB;
-	Node *son_left;
-	Node *son_right;
+	int chave;
+	int balanco;
+	Node *pai;
+	Node *sub_esquerda;
+	Node *sub_direita;
 } Node;
 
-void insert_value(Node **root, int x){
-	if ((*root) == NULL){
-		(*root) = (Node *)malloc(sizeof(Node));
-		**root = (Node){x, 0, NULL, NULL};
+void inserir_valor(Node **raiz, int x){
+	if ((*raiz) == NULL){
+		(*raiz) = (Node *)malloc(sizeof(Node));
+		**raiz = (Node){x, 0, NULL, NULL};
 	}else{
-		if (x < (*root)->key){
-			insert_value(&((*root)->son_left), x);
-		}else if (x > (*root)->key){
-			insert_value(&((*root)->son_right), x);
+		if (x < (*raiz)->chave){
+			inserir_valor(&((*raiz)->sub_esquerda), x);
+		}else if (x > (*raiz)->chave){
+			inserir_valor(&((*raiz)->sub_direita), x);
 		}else{
 			printf("A árvore já possui essa chave!\n");
 		}
 	}	
 }
 
-void print_values(Node **root, int height){
-	if ((*root) != NULL){
+void print_valores(Node **raiz, int height){
+	if ((*raiz) != NULL){
 		int i;
 		for(i = 0; i < height; ++i) printf("\t");
-		printf("%d\n", (*root)->key);
-		print_values(&((*root)->son_left), height+1);
-		print_values(&((*root)->son_right), height+1);
+		printf("%d\n", (*raiz)->chave);
+		print_valores(&((*raiz)->sub_esquerda), height+1);
+		print_valores(&((*raiz)->sub_direita), height+1);
 	}
 }
 
-int get_FB(Node **root, int height){
-	if((*root) == NULL) return height-1;
-	int l = get_FB(&((*root)->son_left), height+1);
-	int r = get_FB(&((*root)->son_right), height+1);
-	(*root)->FB = r-l;
+int get_balanco(Node **raiz, int height){
+	if((*raiz) == NULL) return height-1;
+	int l = get_balanco(&((*raiz)->sub_esquerda), height+1);
+	int r = get_balanco(&((*raiz)->sub_direita), height+1);
+	(*raiz)->balanco = r-l;
 	if (l>=r) return l;
 	return r;
 }
 
-void print_FBs(Node **root, int height){
-	if ((*root) != NULL){
+void print_balanco(Node **raiz, int height){
+	if ((*raiz) != NULL){
 		int i;
 		for(i = 0; i < height; ++i) printf("\t");
-		printf("%d\n", (*root)->FB);
-		print_FBs(&((*root)->son_left), height+1);
-		print_FBs(&((*root)->son_right), height+1);
+		printf("%d\n", (*raiz)->balanco);
+		print_balanco(&((*raiz)->sub_esquerda), height+1);
+		print_balanco(&((*raiz)->sub_direita), height+1);
 	}
 }
-void rotate_right(Node **root){
+void rotacao_direita(Node **raiz){
 	Node *aux1, *aux2;
-	aux1 = (*root)->son_left;
-	aux2 = aux1->son_right;
-	aux1->son_right = (*root);
-	(*root)->son_left = aux2;
-	(*root) = aux1;
+	aux1 = (*raiz)->sub_esquerda;
+	aux2 = aux1->sub_direita;
+	aux1->sub_direita = (*raiz);
+	(*raiz)->sub_esquerda = aux2;
+	(*raiz) = aux1;
 }
-void rotate_left(Node **root){
+void rotacao_esquerda(Node **raiz){
 	Node *aux1, *aux2;
-	aux1 = (*root)->son_right;
-	aux2 = aux1->son_left;
-	aux1->son_left = (*root);
-	(*root)->son_right = aux2;
-	(*root) = aux1;
+	aux1 = (*raiz)->sub_direita;
+	aux2 = aux1->sub_esquerda;
+	aux1->sub_esquerda = (*raiz);
+	(*raiz)->sub_direita = aux2;
+	(*raiz) = aux1;
 }
-void rotate_left_right(Node **root){
-	rotate_left(&((*root)->son_left));
-	rotate_right(root);
+void rotacao_esquerda_direita(Node **raiz){
+	rotacao_esquerda(&((*raiz)->sub_esquerda));
+	rotacao_direita(raiz);
 }
-void rotate_right_left(Node **root){
-	rotate_right(&((*root)->son_right));
-	rotate_left(root);
+void rotacao_direita_esquerda(Node **raiz){
+	rotacao_direita(&((*raiz)->sub_direita));
+	rotacao_esquerda(raiz);
 }
