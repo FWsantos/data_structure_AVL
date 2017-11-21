@@ -7,19 +7,66 @@ typedef struct node{
 	Node *sub_direita;
 } Node;
 
-void inserir_valor(Node **raiz, int x){
+void inserir(Node **raiz, int x){
 	if ((*raiz) == NULL){
 		(*raiz) = (Node *)malloc(sizeof(Node));
 		**raiz = (Node){x, 0, NULL, NULL};
 	}else{
 		if (x < (*raiz)->chave){
-			inserir_valor(&((*raiz)->sub_esquerda), x);
+			inserir(&((*raiz)->sub_esquerda), x);
 		}else if (x > (*raiz)->chave){
-			inserir_valor(&((*raiz)->sub_direita), x);
+			inserir(&((*raiz)->sub_direita), x);
 		}else{
 			printf("A árvore já possui essa chave!\n");
 		}
 	}	
+}
+
+Node **busca(Node **raiz, int valor){
+	if ((*raiz) == NULL || (*raiz)->chave == valor)
+		return raiz;
+	if ((*raiz)->chave > valor)
+		return busca(&((*raiz)->sub_esquerda), valor);
+	if ((*raiz)->chave < valor)
+		return busca(&((*raiz)->sub_direita), valor);
+}
+
+void remover(Node **raiz, int valor){
+	Node **query = busca(raiz, valor);
+	if ((*query) == NULL)
+		printf("Louca\n");
+	if ((*query)->sub_esquerda == NULL){
+		(*query)->pai->su = (*query)->sub_direita;
+		(*query)->sub_direita->pai = (*query)->pai;
+	}
+	if ((*query)->sub_direita == NULL){
+		(*query)->pai = (*query)->sub_esquerda;
+	}
+}
+
+void rotacao_direita(Node **raiz){
+	Node *aux1, *aux2;
+	aux1 = (*raiz)->sub_esquerda;
+	aux2 = aux1->sub_direita;
+	aux1->sub_direita = (*raiz);
+	(*raiz)->sub_esquerda = aux2;
+	(*raiz) = aux1;
+}
+void rotacao_esquerda(Node **raiz){
+	Node *aux1, *aux2;
+	aux1 = (*raiz)->sub_direita;
+	aux2 = aux1->sub_esquerda;
+	aux1->sub_esquerda = (*raiz);
+	(*raiz)->sub_direita = aux2;
+	(*raiz) = aux1;
+}
+void rotacao_esquerda_direita(Node **raiz){
+	rotacao_esquerda(&((*raiz)->sub_esquerda));
+	rotacao_direita(raiz);
+}
+void rotacao_direita_esquerda(Node **raiz){
+	rotacao_direita(&((*raiz)->sub_direita));
+	rotacao_esquerda(raiz);
 }
 
 void print_valores(Node **raiz, int height){
@@ -49,28 +96,4 @@ void print_balanco(Node **raiz, int height){
 		print_balanco(&((*raiz)->sub_esquerda), height+1);
 		print_balanco(&((*raiz)->sub_direita), height+1);
 	}
-}
-void rotacao_direita(Node **raiz){
-	Node *aux1, *aux2;
-	aux1 = (*raiz)->sub_esquerda;
-	aux2 = aux1->sub_direita;
-	aux1->sub_direita = (*raiz);
-	(*raiz)->sub_esquerda = aux2;
-	(*raiz) = aux1;
-}
-void rotacao_esquerda(Node **raiz){
-	Node *aux1, *aux2;
-	aux1 = (*raiz)->sub_direita;
-	aux2 = aux1->sub_esquerda;
-	aux1->sub_esquerda = (*raiz);
-	(*raiz)->sub_direita = aux2;
-	(*raiz) = aux1;
-}
-void rotacao_esquerda_direita(Node **raiz){
-	rotacao_esquerda(&((*raiz)->sub_esquerda));
-	rotacao_direita(raiz);
-}
-void rotacao_direita_esquerda(Node **raiz){
-	rotacao_direita(&((*raiz)->sub_direita));
-	rotacao_esquerda(raiz);
 }
