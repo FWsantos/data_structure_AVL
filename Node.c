@@ -10,16 +10,39 @@ typedef struct node{
 void inserir(Node **raiz, int x){
 	if ((*raiz) == NULL){
 		(*raiz) = (Node *)malloc(sizeof(Node));
-		**raiz = (Node){x, 0, NULL, NULL};
+		**raiz = (Node){x, 0, NULL, NULL, NULL};
 	}else{
 		if (x < (*raiz)->chave){
 			inserir(&((*raiz)->sub_esquerda), x);
+			(*raiz)->sub_esquerda->pai = (*raiz);
 		}else if (x > (*raiz)->chave){
 			inserir(&((*raiz)->sub_direita), x);
+			(*raiz)->sub_direita->pai = (*raiz);
 		}else{
 			printf("A árvore já possui essa chave!\n");
 		}
+		if((*raiz)->sub_esquerda == NULL && (*raiz)->sub_direita == NULL)
+			consertar( *raiz );
 	}	
+}
+void consertar(Node **noh){
+	if ((*noh) == NULL)
+	{
+		/* code */
+	}
+	if ((*noh) == (*noh)->pai->sub_esquerda)
+		(*noh)->pai->balanco--;
+	else
+		(*noh)->pai->balanco++;
+
+	if ((*noh)->pai->balanco >= -1 && (*noh)->pai->balanco <= 1)
+	{
+		/* code */
+	}
+	if ()
+	{
+		/* code */
+	}
 }
 
 Node **busca(Node **raiz, int valor){
@@ -31,18 +54,18 @@ Node **busca(Node **raiz, int valor){
 		return busca(&((*raiz)->sub_direita), valor);
 }
 
-void remover(Node **raiz, int valor){
-	Node **query = busca(raiz, valor);
-	if ((*query) == NULL)
-		printf("Louca\n");
-	if ((*query)->sub_esquerda == NULL){
-		(*query)->pai->su = (*query)->sub_direita;
-		(*query)->sub_direita->pai = (*query)->pai;
-	}
-	if ((*query)->sub_direita == NULL){
-		(*query)->pai = (*query)->sub_esquerda;
-	}
-}
+// void remover(Node **raiz, int valor){
+// 	Node **query = busca(raiz, valor);
+// 	if ((*query) == NULL)
+// 		printf("Louca\n");
+// 	if ((*query)->sub_esquerda == NULL){
+// 		(*query)->pai->su = (*query)->sub_direita;
+// 		(*query)->sub_direita->pai = (*query)->pai;
+// 	}
+// 	if ((*query)->sub_direita == NULL){
+// 		(*query)->pai = (*query)->sub_esquerda;
+// 	}
+// }
 
 void rotacao_direita(Node **raiz){
 	Node *aux1, *aux2;
