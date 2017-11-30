@@ -53,6 +53,7 @@ Node **busca(Node **raiz, int valor){
 	if ((*raiz)->chave < valor)
 		return busca(&((*raiz)->sub_direita), valor);
 }
+
 Node *achaSucessor(Node *ze_ninguem){
 	Node *aux1 = ze_ninguem;
 	while(aux1->sub_esquerda != NULL){
@@ -162,7 +163,7 @@ void print_valores(Node **raiz, int height){
 		for(i = 0; i < height; ++i) printf("\t");
 			printf("%d\n", (*raiz)->chave);
 		print_valores(&((*raiz)->sub_esquerda), height+1);
-		print_valores(&((*raiz)->sub_direita), height+1);
+		print_valores(& ((*raiz)->sub_direita), height+1);
 	}
 }
 
