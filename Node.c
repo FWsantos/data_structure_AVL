@@ -1,4 +1,13 @@
 typedef struct node Node;
+int saberOLadoDoFilho(Node *filho);
+// void inserir(Node **raiz, int x);
+// Node **busca(Node **raiz, int valor);
+// int remover(Node **raiz, int valor);
+// Node *achaSucessor(Node *ze_ninguem);
+// void rotacao_direita(Node **raiz);
+// void rotacao_esquerda(Node **raiz);
+
+
 typedef struct node{
 	int chave;
 	int balanco;
@@ -15,16 +24,26 @@ void inserir(Node **raiz, int x){
 		if (x < (*raiz)->chave){
 			inserir(&((*raiz)->sub_esquerda), x);
 			(*raiz)->sub_esquerda->pai = (*raiz);
+			(*raiz)->balanco--;
+			if ((*raiz)->balanco == -2)
+				rotacao_direita(&raiz);
+			else if((*raiz)->balanco == 0)
+					// alterou_altura = 'F';
+			else if((*raiz)->balanco == -1)
+					// alterou_altura = 'V';
 		}else if (x > (*raiz)->chave){
 			inserir(&((*raiz)->sub_direita), x);
 			(*raiz)->sub_direita->pai = (*raiz);
+			(*raiz)->balanco++;
+			// if ((*raiz)->balanco == 2)
+			// 	rotacao_esquerda(&raiz);
 		}else{
 			printf("A árvore já possui essa chave!\n");
 		}
-		// if((*raiz)->sub_esquerda == NULL && (*raiz)->sub_direita == NULL)
-			// consertar( *raiz );
 	}	
 }
+
+
 // void consertar(Node **noh){
 // 	if ((*noh) == NULL)
 // 	{
@@ -103,7 +122,12 @@ int remover(Node **raiz, int valor){
 		}else{
 			// Remover quando tem dois filhos
 			aux1 = achaSucessor((*query)->sub_direita);
-			aux1->pai->sub_esquerda = aux1->sub_direita;
+			if((*query)->sub_direita == aux1){
+				aux1->pai->sub_direita = aux1->sub_direita;
+			}else{
+				aux1->pai->sub_esquerda = aux1->sub_direita;
+				
+			}
 			aux1->sub_direita->pai = aux1->pai;
 
 			aux1->pai = (*query)->pai;
