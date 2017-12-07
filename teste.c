@@ -20,10 +20,10 @@ int main(){
 	// printf("insira um valor a remover: ");
 	// scanf("%d", &b);
 	// printf("%d\n", b);
-	remover(&root, 5);
-	printf("\n");
-	print_valores(&root, 0);
-	print_balanco(&root, 0);
+	// remover(&root, 5);
+	// printf("\n");
+	// print_valores(&root, 0);
+	// print_balanco(&root, 0);
 	
 	return 0;
 }
