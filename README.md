@@ -1,3 +1,3 @@
 # Trabalho-de-Estruturas-de-Dados
-Implementação de blanceamento utilizando AVL
+Implementação de balanceamento utilizando AVL
 nb
