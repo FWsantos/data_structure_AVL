@@ -1,3 +1,2 @@
 # Trabalho-de-Estruturas-de-Dados
-Implementação de balanceamento utilizando AVL
-nb
+Implementação de uma arvore balanceada utilizando AVL
